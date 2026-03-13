@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${RESIDENT_DB_URL:jdbc:postgresql://localhost:5432/residentdb}
+    username: ${RESIDENT_DB_USER:resident}
+    password: ${RESIDENT_DB_PASSWORD:resident}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:ishsrec}
+    password: ${RABBITMQ_PASSWORD:ishsrec}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+security:
+  jwt:
+    # Example 256-bit base64 secret (replace in real environments)
+    secret: c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0
+    expiration-ms: 3600000
+

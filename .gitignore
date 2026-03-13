@@ -1,0 +1,24 @@
+# --- Build directories ---
+target/
+build/
+out/
+
+# --- Logs and temporary files ---
+*.log
+*.tmp
+*.temp
+
+# --- IDE / Editor settings ---
+
+# VS Code
+.vscode/
+
+# --- Environment / secrets ---
+.env
+
+# --- Maven & Gradle caches ---
+.mvn/
+.gradle/
+
+# --- Other generated files ---
+logs/

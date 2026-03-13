@@ -1,0 +1,51 @@
+name: ishsrec
+
+services:
+
+  resident-db:
+    image: postgres:16
+    container_name: ishsrec-resident-db
+    ports:
+      - "${RESIDENT_DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: "${RESIDENT_DB_NAME:-residentdb}"
+      POSTGRES_USER: "${RESIDENT_DB_USER:-resident}"
+      POSTGRES_PASSWORD: "${RESIDENT_DB_PASSWORD:-resident}"
+    volumes:
+      - resident_db_data:/var/lib/postgresql/data
+    networks:
+      - ishsrec-net
+
+  gateway-service:
+    build: 
+      context: ./gateway-service
+    container_name: ishsrec-gateway-service
+    depends_on:
+     - resident-service
+    ports:
+     - "${GATEWAY_SERVICE_PORT:-8085}:8085"
+    
+
+  resident-service:
+    build:
+      context: ./resident-service
+    container_name: ishsrec-resident-service
+    depends_on:
+      - resident-db
+    environment:
+      RESIDENT_DB_URL: "${RESIDENT_DB_URL:-jdbc:postgresql://resident-db:5432/residentdb}"
+      RESIDENT_DB_USER: "${RESIDENT_DB_USER:-resident}"
+      RESIDENT_DB_PASSWORD: "${RESIDENT_DB_PASSWORD:-resident}"
+    ports:
+      - "${RESIDENT_SERVICE_PORT:-8081}:8080"
+    networks:
+      - ishsrec-net
+
+networks:
+  ishsrec-net:
+    driver: bridge
+
+volumes:
+  resident_db_data:
+  messages_mongo_data:
+
