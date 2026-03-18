@@ -22,9 +22,9 @@ jobs:
       - name: Build gateway-service
         run: |
           cd gateway-service
-          ./mvnw clean verify
+          mvn -B clean verify
 
       - name: Build resident-service
         run: |
           cd resident-service
-          ./mvnw clean verify
+          mvn -B clean verify
