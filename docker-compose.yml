@@ -38,7 +38,6 @@ services:
      - resident-service
     ports:
      - "${GATEWAY_SERVICE_PORT:-8085}:8085"
-    
 
   resident-service:
     build:
@@ -55,6 +54,35 @@ services:
     networks:
       - ishsrec-net
 
+  messages-mongo:
+    image: mongo:7
+    container_name: ishsrec-messages-mongo
+    ports:
+      - "${MESSAGES_MONGO_PORT:-27017}:27017"
+    volumes:
+      - messages_mongo_data:/data/db
+    networks:
+      - ishsrec-net
+
+  messages-service:
+    build:
+      context: ./messages-service
+    container_name: ishsrec-messages-service
+    depends_on:
+      - rabbitmq
+      - messages-mongo
+    environment:
+      MESSAGES_MONGO_URI: "${MESSAGES_MONGO_URI:-mongodb://messages-mongo:27017/messagesdb}"
+      MESSAGES_MONGO_DB: "${MESSAGES_MONGO_DB:-messagesdb}"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "${RABBITMQ_AMQP_PORT:-5672}"
+      RABBITMQ_USERNAME: "${RABBITMQ_DEFAULT_USER:-ishsrec}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_DEFAULT_PASS:-ishsrec}"
+    ports:
+      - "${MESSAGES_SERVICE_PORT:-5002}:5000"
+    networks:
+      - ishsrec-net
+
 networks:
   ishsrec-net:
     driver: bridge
@@ -62,4 +90,4 @@ networks:
 volumes:
   resident_db_data:
   messages_mongo_data:
-
+  
