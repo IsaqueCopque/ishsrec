@@ -14,16 +14,18 @@ import java.util.Map;
 @RequestMapping("/api")
 public class GatewayAuthController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final String residentServiceBaseUrl;
     private final String messagesServiceBaseUrl;
 
     public GatewayAuthController(
+            RestTemplate restTemplate,
             @Value("${services.resident.base-url:http://localhost:8080}") String residentServiceBaseUrl,
             @Value("${services.messages.base-url:http://localhost:5000}") String messagesServiceBaseUrl
     ) {
         this.residentServiceBaseUrl = residentServiceBaseUrl;
         this.messagesServiceBaseUrl = messagesServiceBaseUrl;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping("/login")
