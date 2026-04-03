@@ -2,7 +2,7 @@
 
 import os
 from flask import Flask
-from app.api import dev_messages_bp
+from app.api import dev_messages_bp, devices_bp
 
 def create_app(config=None):
     app = Flask(__name__)
@@ -15,6 +15,7 @@ def create_app(config=None):
 
    
     app.register_blueprint(dev_messages_bp, url_prefix="/api")
+    app.register_blueprint(devices_bp, url_prefix="/api")
 
     @app.route("/health")
     def health():

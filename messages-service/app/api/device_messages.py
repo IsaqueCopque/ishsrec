@@ -13,5 +13,5 @@ def get_messages():
     """
     device_id = request.args.get("deviceId")
     limit = int(request.args.get("limit") or 100)
-    messages= service.find_device_records(device_id=device_id, limit=limit)
-    return jsonify(messages)
+    messages = service.find_device_records(device_id=device_id, limit=limit)
+    return jsonify({"messages": messages})

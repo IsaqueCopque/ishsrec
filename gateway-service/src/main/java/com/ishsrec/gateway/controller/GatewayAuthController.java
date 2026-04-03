@@ -1,18 +1,24 @@
 package com.ishsrec.gateway.controller;
 
 import com.ishsrec.gateway.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
 public class GatewayAuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(GatewayAuthController.class);
 
     private final RestTemplate restTemplate;
     private final String residentServiceBaseUrl;
@@ -39,27 +45,31 @@ public class GatewayAuthController {
             return ResponseEntity.status(authResponse.getStatusCode()).body(authResponse.getBody());
         }
 
-        ResidentLoginResponse residentLogin = authResponse.getBody();
+        ResidentLoginResponse residentLogin = Objects.requireNonNull(authResponse.getBody());
         Map<String, Object> resident = residentLogin.getResident();
         Object residentIdObj = resident != null ? resident.get("id") : null;
         String residentId = residentIdObj != null ? String.valueOf(residentIdObj) : null;
 
-        // Call messages-service /api/devices?residentId=...
-        // String devicesUrl = UriComponentsBuilder
-        //         .fromHttpUrl(messagesServiceBaseUrl + "/api/devices")
-        //         .queryParam("residentId", residentId)
-        //         .toUriString();
+        List<Map<String, Object>> devices = List.of();
+        if (residentId != null) {
+            String devicesUrl = UriComponentsBuilder
+                    .fromHttpUrl(messagesServiceBaseUrl + "/api/devices")
+                    .toUriString();
+            try {
+                ResponseEntity<DevicesResponse> devicesResponse =
+                        restTemplate.getForEntity(devicesUrl, DevicesResponse.class);
+                DevicesResponse devicesBody = devicesResponse.getBody();
+                devices =
+                        devicesBody != null && devicesBody.getDevices() != null
+                                ? devicesBody.getDevices()
+                                : List.of();
+            } catch (RestClientException ex) {
+                log.warn("Failed to load devices for resident {}: {}", residentId, ex.getMessage());
+            }
+        }
 
-        // ResponseEntity<DevicesResponse> devicesResponse =
-        //         restTemplate.getForEntity(devicesUrl, DevicesResponse.class);
-
-        // List<Map<String, Object>> devices =
-        //         devicesResponse.getBody() != null ? devicesResponse.getBody().getDevices() : List.of();
-
-        // GatewayLoginResponse gatewayResponse =
-        //         new GatewayLoginResponse(residentLogin.getToken(), resident, devices);
-
-        GatewayLoginResponse gatewayResponse = new GatewayLoginResponse(residentLogin.getToken(), resident, List.of());
+        GatewayLoginResponse gatewayResponse =
+                new GatewayLoginResponse(residentLogin.getToken(), resident, devices);
 
         return ResponseEntity.ok(gatewayResponse);
     }

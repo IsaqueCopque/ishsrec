@@ -1,8 +1,11 @@
 package com.ishsrec.gateway.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DevicesResponse {
 
     private List<Map<String, Object>> devices;
