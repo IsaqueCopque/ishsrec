@@ -6,7 +6,7 @@ devices_bp = Blueprint("devices", __name__)
 _service = DeviceService()
 
 
-@devices_bp.route("/devices", methods=["GET"])
+@devices_bp.route("/", methods=["GET"])
 def list_devices():
     """
     GET /api/devices

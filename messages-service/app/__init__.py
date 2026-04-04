@@ -14,8 +14,8 @@ def create_app(config=None):
     app.config.setdefault("RABBITMQ_PASSWORD", os.environ.get("RABBITMQ_PASSWORD", "ishsrec"))
 
    
-    app.register_blueprint(dev_messages_bp, url_prefix="/api")
-    app.register_blueprint(devices_bp, url_prefix="/api")
+    app.register_blueprint(dev_messages_bp, url_prefix="/api/dev_messages")
+    app.register_blueprint(devices_bp, url_prefix="/api/devices")
 
     @app.route("/health")
     def health():
