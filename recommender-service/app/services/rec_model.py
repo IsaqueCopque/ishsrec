@@ -50,7 +50,7 @@ class RecModel:
         self._model = model
         self._is_trained = True
 
-    #Pending
+    #To-do: Implementar o algoritmo de recomendação de cenas
     def recommend(self) -> list[SceneRecSchema]:
         if not self._is_trained:
             self.fit_data()

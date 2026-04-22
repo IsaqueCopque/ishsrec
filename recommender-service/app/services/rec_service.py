@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-from app.services import MessagesApiService, RecModel
+from app.services.messages_api_service import MessagesApiService
+from app.services.rec_model import RecModel
 import logging
 
 logger = logging.getLogger(__name__)

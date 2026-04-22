@@ -3,10 +3,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class DeviceSchema(BaseModel):
     """Device document stored in `devices` collection."""
 
-    _id : str =  Field(...)
     hardware_id: str = Field(..., alias="externalId")
     name: str
-    type: str = Field(..., alias="type")
+    type: str
     model: str
     manufacturer: str
     firmware_version :str
