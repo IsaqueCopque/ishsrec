@@ -1,6 +1,6 @@
 # Integrated Smart Home Scene Recommender (ISHSREC)
 
-The Intelligent Smart Home Scene Recommender **(ISHSREC)** is a proof of concept developed as part of my master’s thesis research. This repository contains a microservices-based application designed to simulate smart home device communication and interaction while integrating the recommendation model proposed in my work.
+The Integrated Smart Home Scene Recommender **(ISHSREC)** is a proof of concept developed as part of my master’s thesis research. This repository contains a microservices-based application designed to simulate smart home device communication and interaction while integrating the recommendation model proposed in my work.
 
 ## Context
 
@@ -15,9 +15,7 @@ The Internet of Things has transformed daily life by integrating smart devices i
 - [Prerequisites](#prerequisites)
 - [Quick start](#quick-start)
 - [API reference](#api-reference)
-- [Messaging (RabbitMQ)](#messaging-rabbitmq)
 - [CI](#ci)
-- [notes](#notes)
 
 ## Architecture overview
 
