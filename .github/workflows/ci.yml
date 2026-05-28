@@ -34,4 +34,9 @@ jobs:
         run: |
           cd messages-service
           pip install -r requirements.txt
+
+      - name: Build recommender-service
+        run: |
+          cd recommender-service
+          pip install -r requirements.txt
       
