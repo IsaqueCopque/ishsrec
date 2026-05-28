@@ -2,6 +2,8 @@ package com.ishsrec.gateway.controller;
 
 import java.util.Map;
 
+import com.ishsrec.gateway.api.DevicesResponse;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,12 @@ public class GatewayAuthControllerTest {
                                                 Mockito.eq(ResidentLoginResponse.class)))
                                 .thenReturn(entity);
 
+                Mockito.when(
+                                restTemplate.getForEntity(
+                                                Mockito.anyString(),
+                                                Mockito.eq(DevicesResponse.class)))
+                                .thenReturn(ResponseEntity.ok(new DevicesResponse()));
+
                 String json = """
                                 {
                                   "email":"test@test.com",
@@ -61,7 +69,8 @@ public class GatewayAuthControllerTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.token").isNotEmpty())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.resident.name").isNotEmpty())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.resident.email").isNotEmpty())
-                                .andExpect(MockMvcResultMatchers.jsonPath("$.resident.id").isNotEmpty());
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.resident.id").isNotEmpty())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.devices").isArray());
         }
 
 }

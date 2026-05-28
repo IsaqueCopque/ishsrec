@@ -83,6 +83,15 @@ services:
     networks:
       - ishsrec-net
 
+  recommender-service:
+    build:
+      context: ./recommender-service
+    container_name: ishsrec-recommender-service
+    ports:
+      - "${RECOMMENDER_SERVICE_PORT:-5001}:5000"
+    networks:
+      - ishsrec-net
+
 networks:
   ishsrec-net:
     driver: bridge

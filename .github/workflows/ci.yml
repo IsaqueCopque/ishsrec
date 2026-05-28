@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -28,3 +29,14 @@ jobs:
         run: |
           cd resident-service
           mvn -B clean verify
+  
+      - name: Build messages-service
+        run: |
+          cd messages-service
+          pip install -r requirements.txt
+
+      - name: Build recommender-service
+        run: |
+          cd recommender-service
+          pip install -r requirements.txt
+      

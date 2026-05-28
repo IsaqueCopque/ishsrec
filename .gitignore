@@ -16,9 +16,10 @@ out/
 # --- Environment / secrets ---
 .env
 
-# --- Maven & Gradle caches ---
+# --- Maven & Gradle & Other caches ---
 .mvn/
 .gradle/
+*__pycache__
 
 # --- Other generated files ---
 logs/

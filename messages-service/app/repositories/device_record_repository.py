@@ -1,7 +1,16 @@
-from app.schemas import DeviceRecordSchema
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
 from app.db import get_device_record_collection
+from app.schemas import DeviceRecordSchema
+
+
+def _normalize_record(doc: dict) -> dict:
+    out = dict(doc)
+    if "_id" in out:
+        out["_id"] = str(out["_id"])
+    return out
+
 
 class DeviceRecordRepository:
 
@@ -15,17 +24,14 @@ class DeviceRecordRepository:
 
     def find_all(self, limit: int = 100) -> List[dict]:
         cursor = (
-            self.collection
-            .find()
-            .sort("timestamp", -1)
-            .limit(limit)
+            self.collection.find().sort("timestamp", -1).limit(limit)
         )
-        return list(cursor)
+        return [_normalize_record(d) for d in cursor]
 
     def find_by_device(
-        self, 
-        device_id: str, 
-        limit: int = 100
+        self,
+        device_id: str,
+        limit: int = 100,
     ) -> List[dict]:
         cursor = (
             self.collection
@@ -33,7 +39,7 @@ class DeviceRecordRepository:
             .sort("timestamp", -1)
             .limit(limit)
         )
-        return list(cursor)
+        return [_normalize_record(d) for d in cursor]
 
     def find_by_timerange(
         self,
@@ -52,8 +58,8 @@ class DeviceRecordRepository:
         if device_id is not None:
                 query["deviceId"] = device_id
 
-        cursor = (self.collection.find(query).sort("timestamp", 1))
-        return list(cursor)
+        cursor = self.collection.find(query).sort("timestamp", 1)
+        return [_normalize_record(d) for d in cursor]
 
     def delete_by_device(self, device_id: str) -> int:
         result = self.collection.delete_many({"deviceId": device_id})
