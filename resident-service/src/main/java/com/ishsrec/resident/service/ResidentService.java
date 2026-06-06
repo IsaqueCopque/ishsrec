@@ -3,6 +3,7 @@ package com.ishsrec.resident.service;
 import com.ishsrec.resident.api.LoginResponse;
 import com.ishsrec.resident.model.Resident;
 import com.ishsrec.resident.repository.ResidentRepository;
+import com.ishsrec.resident.security.JwtService;
 import com.ishsrec.resident.messaging.ResidentEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

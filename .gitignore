@@ -1,7 +1,8 @@
 # --- Build directories ---
-target/
-build/
-out/
+**/target/
+**/build/
+**/out/
+*.class
 
 # --- Logs and temporary files ---
 *.log

@@ -1,6 +1,9 @@
-package com.ishsrec.resident.service;
+package com.ishsrec.resident.security;
 
 import com.ishsrec.resident.model.Resident;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -31,13 +34,34 @@ public class JwtService {
         Date expiry = new Date(now.getTime() + expirationMillis);
 
         return Jwts.builder()
-                .setSubject(resident.getId() != null ? resident.getId().toString() : resident.getEmail())
+                .setSubject(resident.getId().toString())
                 .claim("email", resident.getEmail())
                 .claim("name", resident.getName())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(signingKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String extractSubject(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
 

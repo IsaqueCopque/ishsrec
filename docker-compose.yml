@@ -45,6 +45,7 @@ services:
     container_name: ishsrec-resident-service
     depends_on:
       - resident-db
+      - rabbitmq
     environment:
       RESIDENT_DB_URL: "${RESIDENT_DB_URL:-jdbc:postgresql://resident-db:5432/residentdb}"
       RESIDENT_DB_USER: "${RESIDENT_DB_USER:-resident}"

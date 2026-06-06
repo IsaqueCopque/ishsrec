@@ -3,6 +3,7 @@ package com.ishsrec.resident.controller;
 import com.ishsrec.resident.model.Resident;
 import com.ishsrec.resident.service.ResidentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,6 +31,7 @@ public class ResidentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal")
     public ResponseEntity<Resident> getResident(@PathVariable Long id) {
         return residentService.getResident(id)
                 .map(ResponseEntity::ok)
